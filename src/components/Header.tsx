@@ -128,14 +128,10 @@ export const Header = ({
                     <div className="flex items-center justify-center flex-wrap gap-0.5 sm:gap-2 mt-0.5">
                         <button
                             onClick={onToggleDataType}
-                            title={`Click to switch to ${dataType === 'population' ? 'GDP Mode' : 'Population Mode'}`}
-                            className={`flex items-center gap-1 px-1.5 sm:px-2.5 py-0.5 rounded border text-[8px] sm:text-xs font-black uppercase tracking-wider transition-all duration-200 shadow-xs active:scale-95 cursor-pointer ${dataType === 'gdp'
-                                ? 'bg-amber-500 text-white border-amber-600 hover:bg-amber-600'
-                                : 'bg-rose-500 text-white border-rose-600 hover:bg-rose-600 shadow-rose-500/20'
-                                }`}
+                            title={`Switch to ${dataType === 'population' ? 'GDP Mode' : 'Population Mode'}`}
+                            className="flex items-center justify-center p-1 sm:p-1.5 rounded-full border border-gray-300 bg-white text-gray-800 hover:bg-gray-50 transition-all duration-200 shadow-xs active:scale-95 cursor-pointer"
                         >
-                            <span className="text-[10px] sm:text-xs">🌐</span>
-                            <span>{dataType === 'population' ? 'POPULATION' : 'GDP ($)'}</span>
+                            <span className="text-xs sm:text-sm leading-none">🌐</span>
                         </button>
 
                         {/* Premium YouTube Live Broadcast Badge */}
