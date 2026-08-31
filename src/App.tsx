@@ -21,7 +21,7 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100 text-slate-900 flex flex-col font-sans antialiased selection:bg-red-500 selection:text-white">
+    <div className="h-screen h-[100dvh] w-full bg-slate-100 text-slate-900 flex flex-col overflow-hidden font-sans antialiased selection:bg-red-500 selection:text-white">
       <Header
         worldStats={worldStats}
         soundEnabled={soundEnabled}
@@ -32,7 +32,7 @@ export function App() {
 
       <Banner onCommentClick={() => setIsChatOpen(true)} />
 
-      <main className="flex-1 transition-all duration-300">
+      <main className="flex-1 min-h-0 flex flex-col overflow-hidden transition-all duration-300">
         <CountryGrid countries={countries} />
       </main>
 
