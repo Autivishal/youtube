@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { TOP_40_COUNTRIES, WORLD_BASE_STATS } from '../data/countriesData';
 import type { CountryData } from '../data/countriesData';
-import { fetchCountryRealData } from '../services/apiNinjas';
 
 export interface LiveCountry extends CountryData {
     currentPopulation: number;
@@ -13,7 +12,6 @@ export interface LiveWorldStats {
     birthsToday: number;
     deathsToday: number;
     growthToday: number;
-    apiConnected?: boolean;
 }
 
 export function usePopulationTicker(soundEnabled: boolean = false) {
@@ -22,7 +20,6 @@ export function usePopulationTicker(soundEnabled: boolean = false) {
         birthsToday: WORLD_BASE_STATS.birthsToday,
         deathsToday: WORLD_BASE_STATS.deathsToday,
         growthToday: WORLD_BASE_STATS.growthToday,
-        apiConnected: false,
     });
 
     const [countries, setCountries] = useState<LiveCountry[]>(() =>
@@ -35,50 +32,6 @@ export function usePopulationTicker(soundEnabled: boolean = false) {
 
     const startTimeRef = useRef<number>(Date.now());
     const lastSoundTimeRef = useRef<number>(0);
-
-    // Fetch real population data from API-Ninjas using user API Key
-    useEffect(() => {
-        let isMounted = true;
-
-        async function loadRealData() {
-            try {
-                // Fetch sample top countries asynchronously
-                const topToFetch = ['India', 'United States', 'China', 'Indonesia', 'Pakistan', 'Brazil', 'Japan'];
-                let updatedAny = false;
-
-                for (const name of topToFetch) {
-                    if (!isMounted) break;
-                    const realPop = await fetchCountryRealData(name);
-                    if (realPop && realPop > 0) {
-                        updatedAny = true;
-                        setCountries((prev) =>
-                            prev.map((c) => {
-                                if (c.name.toLowerCase().includes(name.toLowerCase()) || name.toLowerCase().includes(c.name.toLowerCase())) {
-                                    return {
-                                        ...c,
-                                        basePopulation: realPop,
-                                        currentPopulation: realPop,
-                                    };
-                                }
-                                return c;
-                            })
-                        );
-                    }
-                }
-
-                if (updatedAny && isMounted) {
-                    setWorldStats((prev) => ({ ...prev, apiConnected: true }));
-                }
-            } catch {
-                // Keep fallback static base
-            }
-        }
-
-        loadRealData();
-        return () => {
-            isMounted = false;
-        };
-    }, []);
 
     const playTickSound = () => {
         if (!soundEnabled) return;
@@ -108,13 +61,12 @@ export function usePopulationTicker(soundEnabled: boolean = false) {
             const addedDeaths = Math.floor(elapsedSec * WORLD_BASE_STATS.deathsPerSecWorld);
             const addedWorldPop = addedBirths - addedDeaths;
 
-            setWorldStats((prev) => ({
-                ...prev,
+            setWorldStats({
                 worldPopulation: WORLD_BASE_STATS.worldPopulation + addedWorldPop,
                 birthsToday: WORLD_BASE_STATS.birthsToday + addedBirths,
                 deathsToday: WORLD_BASE_STATS.deathsToday + addedDeaths,
                 growthToday: WORLD_BASE_STATS.growthToday + addedWorldPop,
-            }));
+            });
 
             setCountries((prevCountries) =>
                 prevCountries.map((c) => {
