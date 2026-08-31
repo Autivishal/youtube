@@ -131,7 +131,7 @@ export const Header = ({
                             title={`Click to switch to ${dataType === 'population' ? 'GDP Mode' : 'Population Mode'}`}
                             className={`flex items-center gap-1 px-1.5 sm:px-2.5 py-0.5 rounded border text-[8px] sm:text-xs font-black uppercase tracking-wider transition-all duration-200 shadow-xs active:scale-95 cursor-pointer ${dataType === 'gdp'
                                 ? 'bg-amber-500 text-white border-amber-600 hover:bg-amber-600'
-                                : 'bg-slate-900 text-white border-slate-900 hover:bg-slate-800'
+                                : 'bg-rose-500 text-white border-rose-600 hover:bg-rose-600 shadow-rose-500/20'
                                 }`}
                         >
                             <span className="text-[10px] sm:text-xs">🌐</span>
