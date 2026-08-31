@@ -39,7 +39,7 @@ export const Header = ({
             <div className="max-w-7xl mx-auto flex flex-row items-center justify-between gap-1.5 sm:gap-6">
 
                 {/* TODAY Stats Box (Left Side on both Mobile & Desktop) */}
-                <div className="flex flex-col items-start min-w-[85px] sm:min-w-[200px] flex-shrink-0">
+                <div className="flex flex-col items-start min-w-[85px] sm:min-w-[200px] flex-shrink-0 pl-2.5 sm:pl-6">
                     <h3 className="text-[8px] sm:text-xs font-black tracking-widest text-gray-500 uppercase mb-0 sm:mb-1">
                         TODAY
                     </h3>
