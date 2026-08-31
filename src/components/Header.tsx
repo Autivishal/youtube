@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Volume2, VolumeX, Play, Check } from 'lucide-react';
+import { Volume2, VolumeX, Check, Bell } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import type { LiveWorldStats } from '../hooks/usePopulationTicker';
 
@@ -143,22 +143,28 @@ export const Header = ({
                             <span>LIVE</span>
                         </div>
 
+                        {/* YouTube Metallic Light Sweep & Ringing Bell Subscribe Button */}
                         <button
                             onClick={handleSubscribe}
-                            className={`flex items-center gap-0.5 text-[8px] sm:text-xs font-black px-1.5 sm:px-3 py-0.5 rounded uppercase tracking-wider transition-all duration-200 shadow-xs active:scale-95 ${subscribed
-                                ? 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                                : 'bg-red-600 hover:bg-red-700 text-white'
+                            className={`relative overflow-hidden flex items-center gap-1 text-[8px] sm:text-xs font-black px-2.5 sm:px-4 py-0.5 sm:py-1 rounded-full uppercase tracking-wider transition-all duration-300 shadow-md active:scale-95 cursor-pointer ${subscribed
+                                ? 'bg-gray-200 text-gray-700 hover:bg-gray-300 ring-1 ring-gray-300'
+                                : 'bg-red-600 hover:bg-red-700 text-white hover:shadow-red-500/40 hover:scale-105'
                                 }`}
                         >
+                            {/* Shimmer Light Sweep Overlay */}
+                            {!subscribed && (
+                                <span className="absolute inset-0 w-1/3 bg-gradient-to-r from-transparent via-white/40 to-transparent animate-shimmer-sweep pointer-events-none" />
+                            )}
+
                             {subscribed ? (
                                 <>
-                                    <Check className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+                                    <Check className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 text-emerald-600" />
                                     <span>SUBSCRIBED</span>
                                 </>
                             ) : (
                                 <>
-                                    <Play className="w-2.5 h-2.5 sm:w-3 sm:h-3 fill-current" />
-                                    <span>SUBSCRIBE</span>
+                                    <Bell className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 fill-current animate-bell-ring text-yellow-300" />
+                                    <span className="font-black tracking-wider text-white">SUBSCRIBE</span>
                                 </>
                             )}
                         </button>
