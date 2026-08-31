@@ -3,20 +3,14 @@ import { usePopulationTicker } from './hooks/usePopulationTicker';
 import { Header } from './components/Header';
 import { Banner } from './components/Banner';
 import { CountryGrid } from './components/CountryGrid';
-import { LiveChatDrawer } from './components/LiveChatDrawer';
 
 export function App() {
   const [soundEnabled, setSoundEnabled] = useState(false);
-  const [isChatOpen, setIsChatOpen] = useState(false);
 
   const { worldStats, countries } = usePopulationTicker(soundEnabled);
 
   const handleToggleSound = () => {
     setSoundEnabled((prev) => !prev);
-  };
-
-  const handleToggleChat = () => {
-    setIsChatOpen((prev) => !prev);
   };
 
   return (
@@ -25,17 +19,13 @@ export function App() {
         worldStats={worldStats}
         soundEnabled={soundEnabled}
         onToggleSound={handleToggleSound}
-        onToggleChat={handleToggleChat}
-        isChatOpen={isChatOpen}
       />
 
-      <Banner onCommentClick={() => setIsChatOpen(true)} />
+      <Banner />
 
       <main className="flex-1 min-h-0 flex flex-col transition-all duration-300">
         <CountryGrid countries={countries} />
       </main>
-
-      <LiveChatDrawer isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
     </div>
   );
 }

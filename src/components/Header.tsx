@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Volume2, VolumeX, MessageSquare, Play, Check } from 'lucide-react';
+import { Volume2, VolumeX, Play, Check } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import type { LiveWorldStats } from '../hooks/usePopulationTicker';
 
@@ -7,16 +7,12 @@ interface HeaderProps {
     worldStats: LiveWorldStats;
     soundEnabled: boolean;
     onToggleSound: () => void;
-    onToggleChat: () => void;
-    isChatOpen: boolean;
 }
 
 export const Header = ({
     worldStats,
     soundEnabled,
     onToggleSound,
-    onToggleChat,
-    isChatOpen,
 }: HeaderProps) => {
     const [subscribed, setSubscribed] = useState(false);
 
@@ -129,15 +125,6 @@ export const Header = ({
                                 }`}
                         >
                             {soundEnabled ? <Volume2 className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5" /> : <VolumeX className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5" />}
-                        </button>
-
-                        <button
-                            onClick={onToggleChat}
-                            title="Toggle Live Chat"
-                            className={`p-0.5 sm:p-1 rounded border text-[9px] flex items-center gap-0.5 ${isChatOpen ? 'bg-blue-50 text-blue-700 border-blue-300' : 'bg-gray-50 text-gray-500 border-gray-200'
-                                }`}
-                        >
-                            <MessageSquare className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5" />
                         </button>
                     </div>
                 </div>
