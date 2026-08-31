@@ -4,7 +4,6 @@ import { Header } from './components/Header';
 import { Banner } from './components/Banner';
 import { CountryGrid } from './components/CountryGrid';
 import { LiveChatDrawer } from './components/LiveChatDrawer';
-import { Footer } from './components/Footer';
 
 export function App() {
   const [soundEnabled, setSoundEnabled] = useState(false);
@@ -21,7 +20,7 @@ export function App() {
   };
 
   return (
-    <div className="h-screen h-[100dvh] w-full bg-slate-100 text-slate-900 flex flex-col overflow-hidden font-sans antialiased selection:bg-red-500 selection:text-white">
+    <div className="min-h-screen w-full bg-slate-100 text-slate-900 flex flex-col py-[100px] overflow-x-hidden font-sans antialiased selection:bg-red-500 selection:text-white">
       <Header
         worldStats={worldStats}
         soundEnabled={soundEnabled}
@@ -32,13 +31,11 @@ export function App() {
 
       <Banner onCommentClick={() => setIsChatOpen(true)} />
 
-      <main className="flex-1 min-h-0 flex flex-col overflow-hidden transition-all duration-300">
+      <main className="flex-1 min-h-0 flex flex-col transition-all duration-300">
         <CountryGrid countries={countries} />
       </main>
 
       <LiveChatDrawer isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
-
-      <Footer />
     </div>
   );
 }
