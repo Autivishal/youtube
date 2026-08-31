@@ -138,9 +138,13 @@ export const Header = ({
                             <span>{dataType === 'population' ? 'POPULATION' : 'GDP ($)'}</span>
                         </button>
 
-                        <div className="flex items-center gap-0.5 bg-red-600 text-white font-black text-[8px] sm:text-xs px-1 sm:px-2.5 py-0.5 rounded shadow-xs uppercase tracking-wider animate-pulse">
-                            <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-white animate-ping" />
-                            <span>LIVE</span>
+                        {/* Premium YouTube Live Broadcast Badge */}
+                        <div className="relative flex items-center gap-1 bg-red-600 text-white font-black text-[8px] sm:text-xs px-2 sm:px-3 py-0.5 sm:py-1 rounded-full shadow-md shadow-red-500/40 uppercase tracking-widest border border-red-500/80">
+                            <span className="relative flex h-2 w-2 items-center justify-center">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
+                                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-white shadow-xs" />
+                            </span>
+                            <span className="drop-shadow-xs font-black">LIVE</span>
                         </div>
 
                         {/* YouTube Metallic Light Sweep & Ringing Bell Subscribe Button */}
