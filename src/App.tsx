@@ -6,11 +6,16 @@ import { CountryGrid } from './components/CountryGrid';
 
 export function App() {
   const [soundEnabled, setSoundEnabled] = useState(false);
+  const [dataType, setDataType] = useState<'population' | 'gdp'>('population');
 
   const { worldStats, countries } = usePopulationTicker(soundEnabled);
 
   const handleToggleSound = () => {
     setSoundEnabled((prev) => !prev);
+  };
+
+  const handleToggleDataType = () => {
+    setDataType((prev) => (prev === 'population' ? 'gdp' : 'population'));
   };
 
   return (
@@ -19,12 +24,14 @@ export function App() {
         worldStats={worldStats}
         soundEnabled={soundEnabled}
         onToggleSound={handleToggleSound}
+        dataType={dataType}
+        onToggleDataType={handleToggleDataType}
       />
 
-      <Banner />
+      <Banner dataType={dataType} />
 
       <main className="flex-1 min-h-0 flex flex-col transition-all duration-300">
-        <CountryGrid countries={countries} />
+        <CountryGrid countries={countries} dataType={dataType} />
       </main>
     </div>
   );

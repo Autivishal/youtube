@@ -7,12 +7,16 @@ interface HeaderProps {
     worldStats: LiveWorldStats;
     soundEnabled: boolean;
     onToggleSound: () => void;
+    dataType: 'population' | 'gdp';
+    onToggleDataType: () => void;
 }
 
 export const Header = ({
     worldStats,
     soundEnabled,
     onToggleSound,
+    dataType,
+    onToggleDataType,
 }: HeaderProps) => {
     const [subscribed, setSubscribed] = useState(false);
 
@@ -38,60 +42,101 @@ export const Header = ({
         <header className="w-full bg-white text-gray-900 border-b border-gray-200 px-1.5 sm:px-4 py-1 sm:py-3 shadow-xs select-none flex-shrink-0">
             <div className="max-w-7xl mx-auto flex flex-row items-center justify-between gap-1.5 sm:gap-6">
 
-                {/* TODAY Stats Box (Left Side on both Mobile & Desktop) */}
+                {/* TODAY / GDP Stats Box (Left Side on both Mobile & Desktop) */}
                 <div className="flex flex-col items-start min-w-[85px] sm:min-w-[200px] flex-shrink-0 pl-2.5 sm:pl-6">
                     <h3 className="text-[8px] sm:text-xs font-black tracking-widest text-gray-500 uppercase mb-0 sm:mb-1">
-                        TODAY
+                        {dataType === 'population' ? 'TODAY' : 'GLOBAL GDP'}
                     </h3>
 
                     <div className="flex flex-col items-start space-y-0 sm:space-y-1">
-                        <div>
-                            <span className="text-[8px] sm:text-[11px] font-semibold text-gray-500 block leading-tight">
-                                Births today
-                            </span>
-                            <span className="text-[10px] sm:text-lg font-black text-gray-900 tracking-tight font-mono leading-tight">
-                                {formatNumber(worldStats.birthsToday)}
-                            </span>
-                        </div>
+                        {dataType === 'population' ? (
+                            <>
+                                <div>
+                                    <span className="text-[8px] sm:text-[11px] font-semibold text-gray-500 block leading-tight">
+                                        Births today
+                                    </span>
+                                    <span className="text-[10px] sm:text-lg font-black text-gray-900 tracking-tight font-mono leading-tight">
+                                        {formatNumber(worldStats.birthsToday)}
+                                    </span>
+                                </div>
 
-                        <div>
-                            <span className="text-[8px] sm:text-[11px] font-semibold text-gray-500 block leading-tight">
-                                Deaths today
-                            </span>
-                            <span className="text-[10px] sm:text-lg font-black text-gray-900 tracking-tight font-mono leading-tight">
-                                {formatNumber(worldStats.deathsToday)}
-                            </span>
-                        </div>
+                                <div>
+                                    <span className="text-[8px] sm:text-[11px] font-semibold text-gray-500 block leading-tight">
+                                        Deaths today
+                                    </span>
+                                    <span className="text-[10px] sm:text-lg font-black text-gray-900 tracking-tight font-mono leading-tight">
+                                        {formatNumber(worldStats.deathsToday)}
+                                    </span>
+                                </div>
 
-                        <div>
-                            <span className="text-[8px] sm:text-[11px] font-semibold text-gray-500 block leading-tight">
-                                Growth today
-                            </span>
-                            <span className="text-[10px] sm:text-lg font-black text-gray-900 tracking-tight font-mono leading-tight">
-                                {formatNumber(worldStats.growthToday)}
-                            </span>
-                        </div>
+                                <div>
+                                    <span className="text-[8px] sm:text-[11px] font-semibold text-gray-500 block leading-tight">
+                                        Growth today
+                                    </span>
+                                    <span className="text-[10px] sm:text-lg font-black text-gray-900 tracking-tight font-mono leading-tight">
+                                        {formatNumber(worldStats.growthToday)}
+                                    </span>
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <div>
+                                    <span className="text-[8px] sm:text-[11px] font-semibold text-gray-500 block leading-tight">
+                                        Added Today
+                                    </span>
+                                    <span className="text-[10px] sm:text-lg font-black text-emerald-600 tracking-tight font-mono leading-tight">
+                                        +${formatNumber(worldStats.gdpAddedToday)}
+                                    </span>
+                                </div>
+
+                                <div>
+                                    <span className="text-[8px] sm:text-[11px] font-semibold text-gray-500 block leading-tight">
+                                        Growth / sec
+                                    </span>
+                                    <span className="text-[10px] sm:text-lg font-black text-emerald-600 tracking-tight font-mono leading-tight">
+                                        +${formatNumber(worldStats.gdpGrowthPerSecWorld)}/s
+                                    </span>
+                                </div>
+
+                                <div>
+                                    <span className="text-[8px] sm:text-[11px] font-semibold text-gray-500 block leading-tight">
+                                        Est. Total GDP
+                                    </span>
+                                    <span className="text-[10px] sm:text-lg font-black text-gray-900 tracking-tight font-mono leading-tight">
+                                        $108.5 Trillion
+                                    </span>
+                                </div>
+                            </>
+                        )}
                     </div>
                 </div>
 
                 {/* Vertical Divider */}
                 <div className="w-px h-14 sm:h-28 bg-gray-200 flex-shrink-0" />
 
-                {/* Current World Population & Controls (Right Side) */}
+                {/* Current World Population or GDP & Controls (Right Side) */}
                 <div className="flex-1 flex flex-col items-center justify-center text-center pl-0.5 sm:pl-0">
                     <h1 className="text-[10px] sm:text-xl md:text-2xl font-bold text-gray-600 tracking-tight mb-0">
-                        Current World Population
+                        {dataType === 'population' ? 'Current World Population' : 'Current World GDP (Nominal)'}
                     </h1>
 
-                    <div className="text-sm xs:text-base sm:text-4xl md:text-5xl font-black text-gray-900 tracking-tight font-mono my-0 sm:my-1 text-slate-800 leading-tight">
-                        {formatNumber(worldStats.worldPopulation)}
+                    <div className="text-sm xs:text-base sm:text-4xl md:text-5xl font-black tracking-tight font-mono my-0 sm:my-1 text-slate-800 leading-tight">
+                        {dataType === 'population' ? formatNumber(worldStats.worldPopulation) : `$${formatNumber(worldStats.worldGDP)}`}
                     </div>
 
-                    {/* Action Bar (Avatar, LIVE badge, SUBSCRIBE) */}
+                    {/* Action Bar (Globe Mode Toggle Button, LIVE badge, SUBSCRIBE, Mute) */}
                     <div className="flex items-center justify-center flex-wrap gap-0.5 sm:gap-2 mt-0.5">
-                        <div className="w-4 h-4 sm:w-7 sm:h-7 rounded-full bg-slate-900 flex items-center justify-center border sm:border-2 border-red-500 shadow-xs overflow-hidden flex-shrink-0">
-                            <span className="text-[8px] sm:text-xs font-bold text-white">🌐</span>
-                        </div>
+                        <button
+                            onClick={onToggleDataType}
+                            title={`Click to switch to ${dataType === 'population' ? 'GDP Mode' : 'Population Mode'}`}
+                            className={`flex items-center gap-1 px-1.5 sm:px-2.5 py-0.5 rounded border text-[8px] sm:text-xs font-black uppercase tracking-wider transition-all duration-200 shadow-xs active:scale-95 cursor-pointer ${dataType === 'gdp'
+                                ? 'bg-amber-500 text-white border-amber-600 hover:bg-amber-600'
+                                : 'bg-slate-900 text-white border-slate-900 hover:bg-slate-800'
+                                }`}
+                        >
+                            <span className="text-[10px] sm:text-xs">🌐</span>
+                            <span>{dataType === 'population' ? 'POPULATION' : 'GDP ($)'}</span>
+                        </button>
 
                         <div className="flex items-center gap-0.5 bg-red-600 text-white font-black text-[8px] sm:text-xs px-1 sm:px-2.5 py-0.5 rounded shadow-xs uppercase tracking-wider animate-pulse">
                             <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-white animate-ping" />

@@ -4,7 +4,9 @@ import type { CountryData } from '../data/countriesData';
 
 export interface LiveCountry extends CountryData {
     currentPopulation: number;
-    isPulsing: boolean;
+    currentGDP: number;
+    popPulsing: boolean;
+    gdpDirection: 'up' | 'down' | 'none';
 }
 
 export interface LiveWorldStats {
@@ -12,6 +14,9 @@ export interface LiveWorldStats {
     birthsToday: number;
     deathsToday: number;
     growthToday: number;
+    worldGDP: number;
+    gdpAddedToday: number;
+    gdpGrowthPerSecWorld: number;
 }
 
 export function usePopulationTicker(soundEnabled: boolean = false) {
@@ -20,13 +25,18 @@ export function usePopulationTicker(soundEnabled: boolean = false) {
         birthsToday: WORLD_BASE_STATS.birthsToday,
         deathsToday: WORLD_BASE_STATS.deathsToday,
         growthToday: WORLD_BASE_STATS.growthToday,
+        worldGDP: WORLD_BASE_STATS.worldGDP,
+        gdpAddedToday: WORLD_BASE_STATS.gdpAddedToday,
+        gdpGrowthPerSecWorld: WORLD_BASE_STATS.gdpGrowthPerSecWorld,
     });
 
     const [countries, setCountries] = useState<LiveCountry[]>(() =>
         TOP_40_COUNTRIES.map((c) => ({
             ...c,
             currentPopulation: c.basePopulation,
-            isPulsing: false,
+            currentGDP: c.baseGDP,
+            popPulsing: false,
+            gdpDirection: 'none',
         }))
     );
 
@@ -61,11 +71,19 @@ export function usePopulationTicker(soundEnabled: boolean = false) {
             const addedDeaths = Math.floor(elapsedSec * WORLD_BASE_STATS.deathsPerSecWorld);
             const addedWorldPop = addedBirths - addedDeaths;
 
+            // Simulate realistic market/forex micro-fluctuations in global GDP
+            const isNegativeTick = Math.random() < 0.15; // 15% chance of minor dip
+            const gdpDeltaFactor = isNegativeTick ? -0.4 : 1.0;
+            const addedWorldGDP = Math.floor(elapsedSec * WORLD_BASE_STATS.gdpGrowthPerSecWorld * gdpDeltaFactor);
+
             setWorldStats({
                 worldPopulation: WORLD_BASE_STATS.worldPopulation + addedWorldPop,
                 birthsToday: WORLD_BASE_STATS.birthsToday + addedBirths,
                 deathsToday: WORLD_BASE_STATS.deathsToday + addedDeaths,
                 growthToday: WORLD_BASE_STATS.growthToday + addedWorldPop,
+                worldGDP: WORLD_BASE_STATS.worldGDP + addedWorldGDP,
+                gdpAddedToday: Math.max(0, WORLD_BASE_STATS.gdpAddedToday + addedWorldGDP),
+                gdpGrowthPerSecWorld: WORLD_BASE_STATS.gdpGrowthPerSecWorld,
             });
 
             setCountries((prevCountries) =>
@@ -73,12 +91,28 @@ export function usePopulationTicker(soundEnabled: boolean = false) {
                     const netRate = c.birthRatePerSec - c.deathRatePerSec;
                     const addedPop = Math.floor(elapsedSec * netRate);
                     const newPop = c.basePopulation + addedPop;
-                    const hasChanged = newPop !== c.currentPopulation;
+
+                    // Micro-fluctuation simulation per country GDP (80% growth, 20% minor market drop)
+                    const countryDip = Math.random() < 0.20;
+                    const cDeltaFactor = countryDip ? -0.3 : 1.0;
+                    const addedGDP = Math.floor(elapsedSec * c.gdpGrowthPerSec * cDeltaFactor);
+                    const newGDP = c.baseGDP + addedGDP;
+
+                    const popChanged = newPop !== c.currentPopulation;
+                    let gdpDir: 'up' | 'down' | 'none' = 'none';
+
+                    if (newGDP > c.currentGDP) {
+                        gdpDir = 'up';
+                    } else if (newGDP < c.currentGDP) {
+                        gdpDir = 'down';
+                    }
 
                     return {
                         ...c,
                         currentPopulation: newPop,
-                        isPulsing: hasChanged,
+                        currentGDP: newGDP,
+                        popPulsing: popChanged,
+                        gdpDirection: gdpDir,
                     };
                 })
             );
